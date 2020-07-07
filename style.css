@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Marmelad&family=Ubuntu&display=swap');
+/*font-family: 'Marmelad', sans-serif;
+font-family: 'Ubuntu', sans-serif;*/
+
+.coffee-list {
+  background-image: url("img/background.jpg");
+  background-size: cover; /*contain*/
+}
+.coffee-item {
+  background-color: rgba(0, 0, 0, .7); /*черная подложка*/
+  border-radius: calc(75px / 2); /* calc - позволяет делать расчеты любых знчений в любой системе измерения. Здесь половина от ширины кнопки*/
+  margin: 15px 0;
+}
+.coffee-item img {
+  width: 75px;
+  background-color: white;
+  border-radius: 50%;
+  cursor: pointer; /*курсор превращается в палец*/
+}
+
+.coffee-item span {
+  font-family: 'Marmelad', sans-serif;
+  color: white;
+  margin-left: 30px;
+}
+
+.coffee-item:hover { /*псевдокласс, активен при наведении курсора*/
+  background-color: rgba(50, 50, 50, .7);
+}
+
+
+
+
+
+
+
+
+
+
+
+.coffee-oper {
+  background-color: rgb(254,212,0);
+  padding: 15px;
+}
+
+.display {
+  border: 2px solid darkgreen;
+  background-color: lightgreen;
+  padding: 10px;
+}
+
+.display span {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.cup img, .atm img {
+  width: 100%; /*100% от родительского элемента*/
+}
+
+.change-box {
+  border: 5px solid black;
+  background-color: rgb(255,57,0);
+  min-height:100px;
+  box-sizing: border-box;
+}
