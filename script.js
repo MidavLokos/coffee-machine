@@ -96,3 +96,99 @@ function changeDisplayText(text) { //(text) локальная переменн�
   let displayText = document.querySelector(".display span");
   displayText.innerHTML = text; //.innerHTML свойство позволяет менять текст при выполнении условий
 }
+
+//10 07 2020
+//================   Drag'n'Drop ============ //
+//Захват элемента мышкой и его перенос
+
+//Захват элемента мышкой и его перенос
+// Для начала mousedown - зажали левую кнопку мыши, поключаем к каждой купюры. Для подключение функции к событие mousedown, используем циклыю.
+let money = document.querySelectorAll(".money img");
+//1 Вариант 
+//for (let i = 0; i < money.length; i++) {
+//  money[i].mousedown = takeMoney;
+//}
+
+//2 Вариант. Используем локальную переменную let bill of money
+for (let bill of money) {
+  bill.onmousedown = takeMoney; //в эту функцию передаем this
+}
+//В функцию, которая присвоена событию, первым параметром передается параметр MouseEvent(все возможные события мыши в браузере)
+//Объект события - event
+function takeMoney(event) {
+  event.preventDefault();
+  /* console.log(this);
+  console.log(event);
+  console.log([event.target, event.clientX, event.clientY]);*/
+  let bill = this;
+  //Чтобы получить все параметры элемента, воспользуемся методом .getBoundingClientRect()
+  //console.log( bill.getBoundingClientRect() ); 
+  
+  let billCoords = bill.getBoundingClientRect();//получаем все параметры объекта
+  
+  let billHeight = billCoords.height;//получили высоту
+  let billWidth = billCoords.width; //получили ширину
+  
+  bill.style.position = "absolute"; //выводим куупюру из дом-дерева
+  if (!bill.style.transform) { //ball.style.transform == ""(=folse)
+  //настраиваем координаты купюры X, Y ,чтобы курсор был по центру
+    bill.style.top = (event.clientY - billHeight/2) + "px"; 
+    bill.style.left = (event.clientX - billWidth/2) + "px"; 
+    bill.style.transform = "rotate(90deg)"; //повернули на 90 градусов
+  } else {
+    bill.style.top = (event.clientY - billWidth/2) + "px"; 
+    bill.style.left = (event.clientX - billHeight/2) + "px"; 
+  }
+    bill.style.transition = "transform.5s"; //задаем скорость повотора на 90гр
+  
+  window.onmousemove = function(event) { //Функция расботает в окне window при движении мыши .onmousemove - отслеживание перемещение мыши
+    //console.log([event.clientX, event.clientY]); // отследиваем положение мыши в окне
+    let billCoords = bill.getBoundingClientRect();
+    let billHeight = billCoords.height;//получили высоту
+    let billWidth = billCoords.width; //получили ширину
+    bill.style.top = (event.clientY - billWidth/2) + "px"; 
+    bill.style.left = (event.clientX - billHeight/2) + "px";
+  }
+  bill.onmouseup = function() {
+  window.onmousemove = null;
+  if ( inAtm(bill) ); //добавили в <div money> <img .... data-cost="50">
+    console.log( bill.getAttribute("data-cost") );
+    console.log( bill.dataset.cost );
+    balance.value = +balance.value + +bill.dataset.cost; //сложение купюр
+    bill.remove(); //Удаляет эл-т купюры(принята в atm)
+  }
+}
+
+function inAtm(bill) {
+  let atm = document.querySelector(".atm img");
+  let atmCoords = atm.getBoundingClientRect();//получаем все параметры объекта
+  let atmLeftX = atmCoords.x;
+  let atmRightX = atmCoords.x + atmCoords.width;
+  let atmTopY = atmCoords.y;
+  let atmBottomY = atmCoords.y + atmCoords.height/3;//определяем примерно высоту как 1/3 часть atm, тобы найти нижнюю линию купюроприемника
+  
+  let billCoords = bill.getBoundingClientRect();
+  let billLeftX = billCoords.x;
+  let billRightX = billCoords.x + billCoords.width;
+  let billY = billCoords.y;
+  if(
+       billLeftX > atmLeftX
+    && billRightX < atmRightX
+    && billY > atmTopY
+    && billY < atmBottomY
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+ 
+ return {
+  atm: [atmLeftX, atmRightX, atmTopY, atmBottomY],
+  bill: [billLeftX, billRightX, billY],
+  };
+
+}
+
+
+
+
